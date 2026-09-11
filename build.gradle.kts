@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.4.10"
+    application
 }
 
 group = "me.goga59"
@@ -9,14 +10,10 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
-}
-
 kotlin {
     jvmToolchain(25)
 }
 
-tasks.test {
-    useJUnitPlatform()
+application {
+    mainClass = "me.goga59.graphlabs.MainKt"
 }

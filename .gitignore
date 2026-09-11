@@ -42,5 +42,9 @@ bin/
 ### VS Code ###
 .vscode/
 
+### Local tools ###
+.codegraph/
+AGENTS.md
+
 ### Mac OS ###
 .DS_Store
