@@ -1,4 +1,4 @@
-package me.goga59.graphlabs
+package me.goga59.binarytreedecoder
 
 import java.io.Reader
 import java.io.Writer
@@ -46,9 +46,7 @@ fun decodeTree(reader: Reader): Tree {
                     path.removeLast()
                 }
 
-                else -> throw IllegalArgumentException(
-                    "Недопустимый символ '$symbol' на позиции $symbolIndex",
-                )
+                else -> throw IllegalArgumentException("Недопустимый символ '$symbol' на позиции $symbolIndex")
             }
         }
     }
@@ -76,9 +74,9 @@ fun renderPng(dot: Path, png: Path) {
 
 fun main(args: Array<String>) {
     try {
-        require(args.size <= 1) { "Использование: graph-labs [путь-к-файлу.txt]" }
+        require(args.size <= 1) { "Использование: binary-tree-decoder [путь-к-файлу.txt]" }
 
-        val root = Path("src/main/kotlin/me/goga59/graphlabs")
+        val root = Path(".")
         val input = args.singleOrNull()?.let { Path(it) } ?: (root / "examples" / "small.txt")
         val baseName = input.nameWithoutExtension
         val results = root / "results"

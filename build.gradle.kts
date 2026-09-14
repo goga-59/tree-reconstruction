@@ -15,5 +15,5 @@ kotlin {
 }
 
 application {
-    mainClass = "me.goga59.graphlabs.MainKt"
+    mainClass = "me.goga59.binarytreedecoder.MainKt"
 }
