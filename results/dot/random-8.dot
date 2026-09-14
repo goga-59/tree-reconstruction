@@ -1,12 +1,11 @@
-digraph Tree {
-	graph [ordering=out];
+graph Tree {
 	node [shape=circle];
 	1 [style=filled, fillcolor=lightblue];
-	1 -> 2;
-	2 -> 3;
-	2 -> 4;
-	4 -> 5;
-	2 -> 6;
-	6 -> 7;
-	1 -> 8;
+	1 -- 2;
+	2 -- 3;
+	2 -- 4;
+	4 -- 5;
+	2 -- 6;
+	6 -- 7;
+	1 -- 8;
 }

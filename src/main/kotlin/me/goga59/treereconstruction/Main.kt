@@ -1,4 +1,4 @@
-package me.goga59.binarytreedecoder
+package me.goga59.treereconstruction
 
 import java.io.Reader
 import java.io.Writer
@@ -62,11 +62,10 @@ fun decodeTree(reader: Reader): Tree {
 
 fun writeDot(tree: Tree, writer: Writer) {
     with(writer) {
-        appendLine("digraph Tree {")
-        appendLine("\tgraph [ordering=out];")
+        appendLine("graph Tree {")
         appendLine("\tnode [shape=circle];")
         appendLine("\t1 [style=filled, fillcolor=lightblue];")
-        tree.edges.forEach { appendLine("\t${it.parent} -> ${it.child};") }
+        tree.edges.forEach { appendLine("\t${it.parent} -- ${it.child};") }
         appendLine("}")
     }
 }
@@ -79,7 +78,7 @@ fun renderPng(dot: Path, png: Path) {
 
 fun main(args: Array<String>) {
     try {
-        require(args.size <= 1) { "Usage: binary-tree-decoder [path-to-file.txt]" }
+        require(args.size <= 1) { "Usage: tree-reconstruction [path-to-file.txt]" }
 
         val input = args.singleOrNull()?.let { Path(it) } ?: Path("examples/small.txt")
         val results = Path("results")
