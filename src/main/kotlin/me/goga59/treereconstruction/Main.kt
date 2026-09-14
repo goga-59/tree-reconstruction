@@ -1,5 +1,6 @@
 package me.goga59.treereconstruction
 
+import java.io.IOException
 import java.io.Reader
 import java.io.Writer
 import java.nio.file.Path
@@ -70,10 +71,16 @@ fun writeDot(tree: Tree, writer: Writer) {
     }
 }
 
-fun renderPng(dot: Path, png: Path) {
-    val process = ProcessBuilder("dot", "-Tpng", dot.toString(), "-o", png.toString()).redirectErrorStream(true).start()
+fun renderPng(dot: Path, png: Path): Boolean {
+    val process = try {
+        ProcessBuilder("dot", "-Tpng", dot.toString(), "-o", png.toString()).redirectErrorStream(true).start()
+    } catch (_: IOException) {
+        return false
+    }
+
     val output = process.inputStream.bufferedReader().use { it.readText() }
     check(process.waitFor() == 0) { "Graphviz failed: $output" }
+    return true
 }
 
 fun main(args: Array<String>) {
@@ -91,11 +98,16 @@ fun main(args: Array<String>) {
         png.parent.createDirectories()
         dot.bufferedWriter().use { writeDot(tree, it) }
 
-        renderPng(dot, png)
+        val pngCreated = renderPng(dot, png)
 
-        println("Vertices: ${tree.vertexCount}, edges: ${tree.edges.size}")
+        println("\nVertices: ${tree.vertexCount}, edges: ${tree.edges.size}")
         println("DOT: ${dot.absolutePathString()}")
-        println("PNG: ${png.absolutePathString()}")
+
+        if (pngCreated) {
+            println("PNG: ${png.absolutePathString()}")
+        } else {
+            println("PNG skipped: Graphviz 'dot' was not found in PATH")
+        }
     } catch (ex: Exception) {
         System.err.println("Error: ${ex.message}")
         exitProcess(1)
