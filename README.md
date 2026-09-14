@@ -64,7 +64,8 @@
 Вывод программы:
 
 ```text
-vertices: 8, edges: 7
+Vertices: 8
+Edges: 1-2, 2-3, 2-4, 4-5, 2-6, 6-7, 1-8
 DOT: results/dot/random-8.dot
 PNG: results/png/random-8.png
 ```

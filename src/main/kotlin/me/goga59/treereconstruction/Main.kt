@@ -14,14 +14,14 @@ import kotlin.io.path.div
 import kotlin.io.path.nameWithoutExtension
 import kotlin.system.exitProcess
 
-// Ребро дерева от родительской вершины к дочерней
+// Ребро, соединяющее родительскую и дочернюю вершины
 data class Edge(val parent: Int, val child: Int)
 
-// Восстановленное дерево с количеством вершин и списком ребер
+// Полученное дерево с его количеством вершин и списоком ребер
 data class Tree(val vertexCount: Int, val edges: List<Edge>)
 
 fun decodeTree(reader: Reader): Tree {
-    // ArrayDeque используется как стек пути от корня до текущей вершины
+    // ArrayDeque используется как стек для пути от корня до текущей вершины
     val path = ArrayDeque<Int>().apply { addLast(1) }
     val edges = mutableListOf<Edge>()
     val buffer = CharArray(DEFAULT_BUFFER_SIZE)
@@ -100,8 +100,9 @@ fun main(args: Array<String>) {
 
         val pngCreated = renderPng(dot, png)
 
-        println("\nVertices: ${tree.vertexCount}, edges: ${tree.edges.size}")
-        println("DOT: ${dot.absolutePathString()}")
+        println("\nVertices: ${tree.vertexCount}")
+        println("Edges: ${tree.edges.joinToString(", ") { "${it.parent}-${it.child}" }}")
+        println("\nDOT: ${dot.absolutePathString()}")
 
         if (pngCreated) {
             println("PNG: ${png.absolutePathString()}")
