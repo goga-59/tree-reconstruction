@@ -42,16 +42,16 @@ fun decodeTree(reader: Reader): Tree {
                 }
 
                 '1' -> {
-                    require(path.size > 1) { "Символ на позиции $symbolIndex возвращает выше корня" }
+                    require(path.size > 1) { "'1' at position $symbolIndex goes above the root" }
                     path.removeLast()
                 }
 
-                else -> throw IllegalArgumentException("Недопустимый символ '$symbol' на позиции $symbolIndex")
+                else -> throw IllegalArgumentException("Invalid symbol '$symbol' at position $symbolIndex")
             }
         }
     }
 
-    require(path.size == 1) { "Обход не вернулся в корень" }
+    require(path.size == 1) { "Traversal did not return to the root" }
     return Tree(nextVertex - 1, edges)
 }
 
@@ -69,19 +69,17 @@ fun writeDot(tree: Tree, writer: Writer) {
 fun renderPng(dot: Path, png: Path) {
     val process = ProcessBuilder("dot", "-Tpng", dot.toString(), "-o", png.toString()).redirectErrorStream(true).start()
     val output = process.inputStream.bufferedReader().use { it.readText() }
-    check(process.waitFor() == 0) { "Graphviz завершился с ошибкой: $output" }
+    check(process.waitFor() == 0) { "Graphviz failed: $output" }
 }
 
 fun main(args: Array<String>) {
     try {
-        require(args.size <= 1) { "Использование: binary-tree-decoder [путь-к-файлу.txt]" }
+        require(args.size <= 1) { "Usage: binary-tree-decoder [path-to-file.txt]" }
 
-        val root = Path(".")
-        val input = args.singleOrNull()?.let { Path(it) } ?: (root / "examples" / "small.txt")
-        val baseName = input.nameWithoutExtension
-        val results = root / "results"
-        val dot = results / "dot" / "$baseName.dot"
-        val png = results / "png" / "$baseName.png"
+        val input = args.singleOrNull()?.let { Path(it) } ?: Path("examples/small.txt")
+        val results = Path("results")
+        val dot = results / "dot" / "${input.nameWithoutExtension}.dot"
+        val png = results / "png" / "${input.nameWithoutExtension}.png"
 
         val tree = input.bufferedReader().use(::decodeTree)
 
@@ -91,11 +89,11 @@ fun main(args: Array<String>) {
 
         renderPng(dot, png)
 
-        println("Восстановлено вершин: ${tree.vertexCount}, ребер: ${tree.edges.size}")
+        println("Vertices: ${tree.vertexCount}, edges: ${tree.edges.size}")
         println("DOT: ${dot.absolutePathString()}")
         println("PNG: ${png.absolutePathString()}")
     } catch (ex: Exception) {
-        System.err.println("Ошибка: ${ex.message}")
+        System.err.println("Error: ${ex.message}")
         exitProcess(1)
     }
 }
