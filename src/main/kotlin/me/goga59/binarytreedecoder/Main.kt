@@ -13,15 +13,19 @@ import kotlin.io.path.div
 import kotlin.io.path.nameWithoutExtension
 import kotlin.system.exitProcess
 
+// Ребро дерева от родительской вершины к дочерней
 data class Edge(val parent: Int, val child: Int)
 
+// Восстановленное дерево с количеством вершин и списком ребер
 data class Tree(val vertexCount: Int, val edges: List<Edge>)
 
 fun decodeTree(reader: Reader): Tree {
+    // ArrayDeque используется как стек пути от корня до текущей вершины
     val path = ArrayDeque<Int>().apply { addLast(1) }
     val edges = mutableListOf<Edge>()
     val buffer = CharArray(DEFAULT_BUFFER_SIZE)
 
+    // Корень имеет номер 1, поэтому следующей вершине назначается номер 2
     var nextVertex = 2
     var symbolIndex = 0
 
@@ -34,6 +38,7 @@ fun decodeTree(reader: Reader): Tree {
             if (symbol.isWhitespace()) continue
             symbolIndex++
 
+            // 0 - перейти к новой дочерней вершине, 1 - вернуться к родителю
             when (symbol) {
                 '0' -> {
                     val child = nextVertex++
